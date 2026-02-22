@@ -1,0 +1,26 @@
+# Root-level ignores
+
+# Environment files anywhere
+.env
+**/.env
+**/.env.local
+**/.env.production
+
+# Node modules anywhere
+node_modules/
+**/node_modules/
+
+# Build folders anywhere
+dist/
+**/dist/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
