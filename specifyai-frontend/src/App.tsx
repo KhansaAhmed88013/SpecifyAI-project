@@ -19,7 +19,6 @@ import VerifyResetCodePage from "./pages/VerifyResetCodePage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import {
   analyzeRequirement,
-  getErrorMessage,
   getErrorStatus,
   login,
   signup,
