@@ -71,4 +71,4 @@ export default defineConfig([
   },
 ])
 ```
-CI/CD deployment test
+CI/CD deployment test.
