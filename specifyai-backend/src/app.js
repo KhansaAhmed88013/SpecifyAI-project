@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const morgan = require("morgan");
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
 
 const createError = require('./utils/createError');
 const errorHandler = require('./utils/errorHandler');
@@ -23,6 +26,9 @@ const limiter = rateLimit({
 
 app.use('/api', limiter);
 
+// Logging
+app.use(morgan("dev"));
+
 // Middleware to parse JSON bodies
 app.use(express.json());
 
@@ -36,6 +42,28 @@ app.use(
 		credentials: true
 	})
 );
+
+// Swagger configuration
+const swaggerOptions = {
+	definition: {
+		openapi: "3.0.0",
+		info: {
+			title: "SpecifyAI API",
+			version: "1.0.0",
+			description: "API documentation for SpecifyAI"
+		},
+		servers: [
+			{
+				url: "http://specifyai.159.89.165.42.nip.io"
+			}
+		]
+	},
+	apis: ["./src/routes/*.js"]
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
