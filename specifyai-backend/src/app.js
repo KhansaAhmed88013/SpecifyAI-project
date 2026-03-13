@@ -68,7 +68,7 @@ app.get("/api-docs", swaggerUi.setup(swaggerDocs));
 
 
 // Health check endpoint
-app.get('/health', (req, res) => {
+app.get('/api/health', (req, res) => {
 	res.status(200).json({
 		status: 'running',
 		service: 'SpecifyAI API'
