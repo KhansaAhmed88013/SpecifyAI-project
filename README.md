@@ -1,5 +1,7 @@
 # SpecifyAI – AI Powered Requirement Analysis Platform
 
+Built using DigitalOcean Gradient™ AI for intelligent requirement analysis.
+
 SpecifyAI is a cloud-deployed web application that helps users convert project ideas into structured technical specifications using AI.
 
 The system allows users to create projects, input requirements, and generate AI-assisted specifications to accelerate software planning.
