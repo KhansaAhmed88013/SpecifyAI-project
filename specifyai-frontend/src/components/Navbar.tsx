@@ -75,10 +75,10 @@ export default function Navbar({ userName, isLoggedIn, onLogout }: NavbarProps) 
         </Link>
 
         <div className="flex items-center gap-2 sm:gap-3">
-        {isLoggedIn ? (
+          {isLoggedIn ? (
           <div
             ref={menuRef}
-            className="relative hidden sm:block"
+            className="relative"
             onMouseEnter={() => setIsMenuOpen(true)}
             onMouseLeave={() => setIsMenuOpen(false)}
             onBlur={(event) => {
@@ -91,7 +91,7 @@ export default function Navbar({ userName, isLoggedIn, onLogout }: NavbarProps) 
             <span className="absolute inset-x-0 top-full h-2" aria-hidden="true" />
             <button
               type="button"
-              className="inline-flex items-center gap-1 rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-sm text-white transition-all duration-300 hover:text-white focus:outline-none"
+              className="inline-flex max-w-[48vw] items-center gap-1 rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-xs text-white transition-all duration-300 hover:text-white focus:outline-none sm:max-w-none sm:text-sm"
               onFocus={() => setIsMenuOpen(true)}
               onClick={() => setIsMenuOpen((prev) => !prev)}
               onKeyDown={(event) => {
@@ -119,7 +119,7 @@ export default function Navbar({ userName, isLoggedIn, onLogout }: NavbarProps) 
               </svg>
             </button>
             {isMenuOpen ? (
-              <div className="absolute right-0 mt-2 w-44 rounded-xl border border-white/10 bg-slate-950/90 py-1 shadow-2xl shadow-blue-900/30 backdrop-blur-lg">
+              <div className="absolute right-0 mt-2 w-40 rounded-xl border border-white/10 bg-slate-950/90 py-1 shadow-2xl shadow-blue-900/30 backdrop-blur-lg sm:w-44">
                 <Link
                   to="/settings"
                   onClick={() => setIsMenuOpen(false)}
@@ -137,7 +137,7 @@ export default function Navbar({ userName, isLoggedIn, onLogout }: NavbarProps) 
               </div>
             ) : null}
           </div>
-        ) : null}
+          ) : null}
           {/*<motion.button
             type="button"
             onClick={toggleTheme}
@@ -160,7 +160,7 @@ export default function Navbar({ userName, isLoggedIn, onLogout }: NavbarProps) 
           <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
             <Link
               to="/new-project"
-              className="rounded-xl bg-gradient-to-r from-blue-500 to-blue-700 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.45)] transition-all duration-300 hover:shadow-[0_0_28px_rgba(59,130,246,0.65)]"
+              className="rounded-xl bg-gradient-to-r from-blue-500 to-blue-700 px-3 py-2 text-xs font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.45)] transition-all duration-300 hover:shadow-[0_0_28px_rgba(59,130,246,0.65)] sm:px-4 sm:text-sm"
             >
               New Project
             </Link>
