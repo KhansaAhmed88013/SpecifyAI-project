@@ -66,19 +66,19 @@ export default function Navbar({ userName, isLoggedIn, onLogout }: NavbarProps) 
         transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      <div className="relative mx-auto flex h-full w-full max-w-7xl items-center justify-between px-4 sm:px-6 md:px-8">
+      <div className="relative mx-auto flex h-full w-full max-w-7xl items-center justify-between px-3 sm:px-6 md:px-8">
         <Link
           to="/dashboard"
-          className="text-lg font-semibold tracking-wide text-white transition-all duration-300 hover:text-white"
+          className="shrink-0 text-lg font-semibold tracking-wide text-white transition-all duration-300 hover:text-white"
         >
           SpecifyAI
         </Link>
 
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="ml-auto flex min-w-0 items-center gap-2 overflow-visible sm:gap-3">
           {isLoggedIn ? (
           <div
             ref={menuRef}
-            className="relative"
+            className="relative shrink-0"
             onMouseEnter={() => setIsMenuOpen(true)}
             onMouseLeave={() => setIsMenuOpen(false)}
             onBlur={(event) => {
@@ -91,7 +91,7 @@ export default function Navbar({ userName, isLoggedIn, onLogout }: NavbarProps) 
             <span className="absolute inset-x-0 top-full h-2" aria-hidden="true" />
             <button
               type="button"
-              className="inline-flex max-w-[48vw] items-center gap-1 rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-xs text-white transition-all duration-300 hover:text-white focus:outline-none sm:max-w-none sm:text-sm"
+              className="inline-flex max-w-[36vw] items-center gap-1 rounded-xl border border-white/10 bg-white/10 px-2.5 py-2 text-xs text-white transition-all duration-300 hover:text-white focus:outline-none sm:max-w-none sm:px-3 sm:text-sm"
               onFocus={() => setIsMenuOpen(true)}
               onClick={() => setIsMenuOpen((prev) => !prev)}
               onKeyDown={(event) => {
@@ -102,7 +102,7 @@ export default function Navbar({ userName, isLoggedIn, onLogout }: NavbarProps) 
               aria-haspopup="true"
               aria-expanded={isMenuOpen}
             >
-              <span>{userName}</span>
+              <span className="max-w-[22vw] truncate sm:max-w-none">{userName}</span>
               <svg
                 aria-hidden="true"
                 viewBox="0 0 20 20"
@@ -119,7 +119,7 @@ export default function Navbar({ userName, isLoggedIn, onLogout }: NavbarProps) 
               </svg>
             </button>
             {isMenuOpen ? (
-              <div className="absolute right-0 mt-2 w-40 rounded-xl border border-white/10 bg-slate-950/90 py-1 shadow-2xl shadow-blue-900/30 backdrop-blur-lg sm:w-44">
+              <div className="absolute right-0 top-full z-60 mt-2 w-40 max-w-[calc(100vw-1rem)] rounded-xl border border-white/10 bg-slate-950/95 py-1 shadow-2xl shadow-blue-900/30 backdrop-blur-lg sm:w-44">
                 <Link
                   to="/settings"
                   onClick={() => setIsMenuOpen(false)}
@@ -160,7 +160,7 @@ export default function Navbar({ userName, isLoggedIn, onLogout }: NavbarProps) 
           <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
             <Link
               to="/new-project"
-              className="rounded-xl bg-gradient-to-r from-blue-500 to-blue-700 px-3 py-2 text-xs font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.45)] transition-all duration-300 hover:shadow-[0_0_28px_rgba(59,130,246,0.65)] sm:px-4 sm:text-sm"
+              className="rounded-xl bg-linear-to-r from-blue-500 to-blue-700 px-2.5 py-2 text-[11px] font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.45)] transition-all duration-300 hover:shadow-[0_0_28px_rgba(59,130,246,0.65)] sm:px-4 sm:text-sm"
             >
               New Project
             </Link>
