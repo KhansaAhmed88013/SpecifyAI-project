@@ -132,4 +132,4 @@ Khansa Ahmed
 ## Hackathon Submission
 
 SpecifyAI demonstrates how AI can assist developers and teams in transforming ideas into structured software requirements using an accessible web platform deployed on cloud infrastructure.
-.
+..
