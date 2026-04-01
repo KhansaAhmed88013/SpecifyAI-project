@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import html2pdf from "html2pdf.js";
+import { motion } from "framer-motion";
 import { clearAuth } from "../services/auth";
 import {
   getErrorMessage,
@@ -160,13 +161,13 @@ export default function SpecPreviewPage() {
   };
 
   const sectionTitleClass =
-    "text-base font-semibold uppercase tracking-wide text-slate-800 dark:text-slate-100";
+    "text-base font-semibold uppercase tracking-wide text-white";
   const sectionBodyClass =
-    "mt-3 text-sm leading-relaxed text-slate-500 dark:text-slate-400";
+    "mt-3 text-sm leading-relaxed text-white/75";
   const itemTitleClass =
-    "text-sm font-semibold uppercase tracking-wide text-slate-800 dark:text-slate-100";
+    "text-sm font-semibold uppercase tracking-wide text-white";
   const listClass =
-    "mt-3 list-disc pl-5 text-sm leading-relaxed text-slate-500 dark:text-slate-400";
+    "mt-3 list-disc pl-5 text-sm leading-relaxed text-white/75";
   const renderStringList = (
     items: Array<string | undefined> | undefined,
     keyPrefix: string,
@@ -176,17 +177,22 @@ export default function SpecPreviewPage() {
       .map((item, index) => <li key={`${keyPrefix}-${index}`}>{item}</li>);
 
   return (
-    <div className="min-h-screen bg-white transition-colors dark:bg-slate-950">
-      <section className="mx-auto max-w-4xl space-y-6 px-4 py-10 sm:px-6">
-        <div className="rounded-xl border border-teal-200 bg-teal-50 px-4 py-3 text-sm font-semibold text-teal-800 transition-all duration-200 ease-in-out dark:border-teal-500/40 dark:bg-teal-500/10 dark:text-teal-300">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="min-h-[calc(100vh-4rem)] bg-linear-to-br from-black via-gray-900 to-black px-4 py-8 sm:px-6"
+    >
+      <section className="mx-auto max-w-5xl space-y-6 rounded-2xl border border-white/10 bg-white/10 p-6 shadow-2xl shadow-blue-900/25 backdrop-blur-xl transition-all duration-300 sm:p-8">
+        <div className="rounded-xl border border-emerald-300/40 bg-emerald-500/20 px-4 py-3 text-sm font-semibold text-emerald-100 shadow-[0_0_18px_rgba(16,185,129,0.25)] transition-all duration-300">
           Specification Generated Successfully
         </div>
 
         {error ? (
-          <p className="text-sm text-rose-600 dark:text-rose-400">{error}</p>
+          <p className="text-sm text-rose-200 transition-all duration-300">{error}</p>
         ) : null}
         {isLoading ? (
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-white/70 transition-all duration-300">
             Loading specification...
           </p>
         ) : null}
@@ -194,7 +200,7 @@ export default function SpecPreviewPage() {
           <button
             type="button"
             onClick={() => navigate("/dashboard")}
-            className="inline-flex items-center justify-center rounded-xl border border-teal-700 px-4 py-2 text-sm font-semibold text-teal-700 transition-all duration-200 ease-in-out hover:bg-teal-50 dark:border-teal-400 dark:text-teal-400 dark:hover:bg-slate-800"
+            className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-4 py-2 text-sm font-semibold text-white/85 transition-all duration-300 hover:bg-white/15"
           >
             Back to Dashboard
           </button>
@@ -202,10 +208,10 @@ export default function SpecPreviewPage() {
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-2xl font-semibold text-slate-800 dark:text-slate-100">
+            <h1 className="text-3xl font-semibold text-white transition-all duration-300">
               Specification Preview
             </h1>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            <p className="mt-1 text-sm text-white/70 transition-all duration-300">
               Review the AI-generated specification below.
             </p>
           </div>
@@ -214,7 +220,7 @@ export default function SpecPreviewPage() {
               type="button"
               onClick={handleDownload}
               disabled={!spec || isLoading}
-              className="rounded-xl bg-teal-700 px-5 py-2 text-sm font-semibold text-white transition-all duration-200 ease-in-out hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-70"
+              className="rounded-xl bg-linear-to-r from-blue-500 to-blue-700 px-5 py-2 text-sm font-semibold text-white shadow-[0_0_20px_rgba(59,130,246,0.45)] transition-all duration-300 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-70"
             >
               Download PDF
             </button>
@@ -224,20 +230,20 @@ export default function SpecPreviewPage() {
         <div
           ref={documentRef}
           data-pdf-root
-          className="space-y-8 rounded-xl border border-slate-200 bg-white p-8 shadow-md transition-all duration-200 ease-in-out dark:border-slate-800 dark:bg-slate-900"
+          className="space-y-8 rounded-xl border border-white/15 bg-white/10 p-8 shadow-xl shadow-blue-900/20 backdrop-blur-lg transition-all duration-300"
         >
           <section>
-            <h1 className="text-2xl font-semibold text-slate-800 dark:text-slate-100">
+            <h1 className="text-2xl font-semibold text-white">
               Specification Document
             </h1>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            <p className="mt-1 text-sm text-white/70">
               Generated by SpecifyAI
             </p>
           </section>
 
           <section>
             <h2
-              className={`${sectionTitleClass} border-b border-slate-200 pb-2 mb-4 dark:border-slate-800`}
+              className={`${sectionTitleClass} mb-4 border-b border-white/20 pb-2`}
             >
               {spec?.overview?.title ?? "Overview"}
             </h2>
@@ -248,7 +254,7 @@ export default function SpecPreviewPage() {
 
           <section>
             <h2
-              className={`${sectionTitleClass} border-b border-slate-200 pb-2 mb-4 dark:border-slate-800`}
+              className={`${sectionTitleClass} mb-4 border-b border-white/20 pb-2`}
             >
               {spec?.problem_statement?.title ?? "Problem Statement"}
             </h2>
@@ -264,7 +270,7 @@ export default function SpecPreviewPage() {
 
           <section>
             <h2
-              className={`${sectionTitleClass} border-b border-slate-200 pb-2 mb-4 dark:border-slate-800`}
+              className={`${sectionTitleClass} mb-4 border-b border-white/20 pb-2`}
             >
               {spec?.proposed_solution?.title ?? "Proposed Solution"}
             </h2>
@@ -280,11 +286,11 @@ export default function SpecPreviewPage() {
 
           <section>
             <h2
-              className={`${sectionTitleClass} border-b border-slate-200 pb-2 mb-4 dark:border-slate-800`}
+              className={`${sectionTitleClass} mb-4 border-b border-white/20 pb-2`}
             >
               {spec?.goals?.title ?? "Goals"}
             </h2>
-            <div className="mt-3 space-y-4 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+            <div className="mt-3 space-y-4 text-sm leading-relaxed text-white/75">
               {(spec?.goals?.items ?? []).map((goal, index) => (
                 <div key={`${goal?.title ?? "goal"}-${index}`}>
                   <p className={itemTitleClass} data-subheading>
@@ -298,11 +304,11 @@ export default function SpecPreviewPage() {
 
           <section>
             <h2
-              className={`${sectionTitleClass} border-b border-slate-200 pb-2 mb-4 dark:border-slate-800`}
+              className={`${sectionTitleClass} mb-4 border-b border-white/20 pb-2`}
             >
               {spec?.user_roles?.title ?? "User Roles"}
             </h2>
-            <div className="mt-3 space-y-4 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+            <div className="mt-3 space-y-4 text-sm leading-relaxed text-white/75">
               {(spec?.user_roles?.roles ?? []).map((role, index) => (
                 <div key={`${role?.name ?? "role"}-${index}`}>
                   <p className={itemTitleClass} data-subheading>
@@ -316,11 +322,11 @@ export default function SpecPreviewPage() {
 
           <section>
             <h2
-              className={`${sectionTitleClass} border-b border-slate-200 pb-2 mb-4 dark:border-slate-800`}
+              className={`${sectionTitleClass} mb-4 border-b border-white/20 pb-2`}
             >
               {spec?.functional_requirements?.title ?? "Functional Requirements"}
             </h2>
-            <div className="mt-3 space-y-4 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+            <div className="mt-3 space-y-4 text-sm leading-relaxed text-white/75">
               {(spec?.functional_requirements?.requirements ?? []).map((item, index) => (
                 <div key={`${item?.id ?? "fr"}-${index}`}>
                   <p className={itemTitleClass} data-subheading>
@@ -335,11 +341,11 @@ export default function SpecPreviewPage() {
 
           <section>
             <h2
-              className={`${sectionTitleClass} border-b border-slate-200 pb-2 mb-4 dark:border-slate-800`}
+              className={`${sectionTitleClass} mb-4 border-b border-white/20 pb-2`}
             >
               {spec?.non_functional_requirements?.title ?? "Non-Functional Requirements"}
             </h2>
-            <div className="mt-3 space-y-4 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+            <div className="mt-3 space-y-4 text-sm leading-relaxed text-white/75">
               {(spec?.non_functional_requirements?.requirements ?? []).map(
                 (item, index) => (
                   <div key={`${item?.id ?? "nfr"}-${index}`}>
@@ -357,7 +363,7 @@ export default function SpecPreviewPage() {
 
           <section>
             <h2
-              className={`${sectionTitleClass} border-b border-slate-200 pb-2 mb-4 dark:border-slate-800`}
+              className={`${sectionTitleClass} mb-4 border-b border-white/20 pb-2`}
             >
               {spec?.assumptions?.title ?? "Assumptions"}
             </h2>
@@ -370,7 +376,7 @@ export default function SpecPreviewPage() {
 
           <section>
             <h2
-              className={`${sectionTitleClass} border-b border-slate-200 pb-2 mb-4 dark:border-slate-800`}
+              className={`${sectionTitleClass} mb-4 border-b border-white/20 pb-2`}
             >
               {spec?.constraints?.title ?? "Constraints"}
             </h2>
@@ -383,7 +389,7 @@ export default function SpecPreviewPage() {
 
           <section>
             <h2
-              className={`${sectionTitleClass} border-b border-slate-200 pb-2 mb-4 dark:border-slate-800`}
+              className={`${sectionTitleClass} mb-4 border-b border-white/20 pb-2`}
             >
               {spec?.dependencies?.title ?? "Dependencies"}
             </h2>
@@ -394,11 +400,11 @@ export default function SpecPreviewPage() {
           {spec?.risks ? (
             <section>
               <h2
-                className={`${sectionTitleClass} border-b border-slate-200 pb-2 mb-4 dark:border-slate-800`}
+                className={`${sectionTitleClass} mb-4 border-b border-white/20 pb-2`}
               >
                 {spec?.risks?.title ?? "Risks & Mitigation"}
               </h2>
-              <div className="mt-3 space-y-4 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+              <div className="mt-3 space-y-4 text-sm leading-relaxed text-white/75">
                 {(spec?.risks?.items ?? []).map((risk, index) => (
                   <div key={`${risk?.risk ?? "risk"}-${index}`}>
                     <p className={itemTitleClass} data-subheading>
@@ -415,6 +421,6 @@ export default function SpecPreviewPage() {
           ) : null}
         </div>
       </section>
-    </div>
+    </motion.div>
   );
 }

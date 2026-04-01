@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   getProjectById,
   submitClarifications,
@@ -32,6 +33,10 @@ export default function ClarificationQuestionsPage() {
     currentRound && totalRounds
       ? Math.round((currentRound / totalRounds) * 100)
       : 0;
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   useEffect(() => {
     // Reset validation state when questions change
@@ -122,6 +127,7 @@ export default function ClarificationQuestionsPage() {
       // Clear answers FIRST when new questions arrive
       if (response.screen === "QUESTIONS" && response.questions) {
         setAnswers({});
+        scrollToTop();
       }
 
       setQuestions(response.questions ?? []);
@@ -167,6 +173,7 @@ export default function ClarificationQuestionsPage() {
       // Clear answers FIRST when new questions arrive
       if (response.screen === "QUESTIONS" && response.questions) {
         setAnswers({});
+        scrollToTop();
       }
 
       setQuestions(response.questions ?? []);
@@ -202,20 +209,25 @@ export default function ClarificationQuestionsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white transition-colors dark:bg-slate-950">
-      <section className="mx-auto max-w-4xl space-y-6 px-4 py-10 sm:px-6">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-black via-gray-900 to-black px-4 py-8 sm:px-6"
+    >
+      <section className="mx-auto max-w-5xl space-y-6 rounded-2xl border border-white/10 bg-white/10 p-6 shadow-2xl shadow-blue-900/25 backdrop-blur-xl transition-all duration-300 sm:p-8">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-800 dark:text-slate-100">
+          <h1 className="text-3xl font-semibold text-white transition-all duration-300">
             Clarification Required
           </h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          <p className="mt-1 text-sm text-white/70 transition-all duration-300">
             Answer these questions so we can produce a precise specification.
           </p>
         </div>
 
         {requirement ? (
-          <div className="rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-500 shadow-md transition-all duration-200 ease-in-out dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
-            <span className="font-semibold text-slate-800 dark:text-slate-100">
+          <div className="rounded-xl border border-white/10 bg-white/10 p-6 text-sm text-white/75 shadow-xl shadow-blue-900/20 backdrop-blur-lg transition-all duration-300">
+            <span className="font-semibold text-white transition-all duration-300">
               Requirement:
             </span>{" "}
             {requirement}
@@ -223,27 +235,27 @@ export default function ClarificationQuestionsPage() {
         ) : null}
 
         {error ? (
-          <p className="text-sm text-rose-600 dark:text-rose-400">{error}</p>
+          <p className="text-sm text-rose-200 transition-all duration-300">{error}</p>
         ) : null}
         {isLoading ? (
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-white/70 transition-all duration-300">
             Loading questions...
           </p>
         ) : null}
 
         {screen === "DECISION" ? (
           <div className="space-y-4">
-            <div className="rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-500 shadow-md transition-all duration-200 ease-in-out dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
-              <p className="text-sm text-slate-500 dark:text-slate-400">
+            <div className="rounded-xl border border-white/10 bg-white/10 p-6 text-sm text-white/75 shadow-xl shadow-blue-900/20 backdrop-blur-lg transition-all duration-300">
+              <p className="text-sm text-white/70 transition-all duration-300">
                 You already have enough information to generate a complete
                 specification.
               </p>
-              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+              <p className="mt-2 text-sm text-white/70 transition-all duration-300">
                 If you choose "Generate Specification Document", SpecifyAI will
                 generate a professional software specification based on your
                 current answers.
               </p>
-              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+              <p className="mt-2 text-sm text-white/70 transition-all duration-300">
                 If you choose "Ask One More Round", SpecifyAI will ask a final
                 set of focused questions to make your document more precise,
                 detailed, and closer to real-world industry standards.
@@ -254,7 +266,7 @@ export default function ClarificationQuestionsPage() {
                 type="button"
                 onClick={() => handleDecision("GENERATE")}
                 disabled={isSubmitting}
-                className="inline-flex items-center justify-center rounded-xl bg-teal-700 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 ease-in-out hover:bg-teal-800"
+                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-blue-700 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_20px_rgba(59,130,246,0.45)] transition-all duration-300 hover:scale-105"
               >
                 {isSubmitting ? "Processing..." : "Generate Specification Document"}
               </button>
@@ -262,7 +274,7 @@ export default function ClarificationQuestionsPage() {
                 type="button"
                 onClick={() => handleDecision("EXTRA_ROUND")}
                 disabled={isSubmitting}
-                className="inline-flex items-center justify-center rounded-xl border border-teal-700 px-5 py-2.5 text-sm font-semibold text-teal-700 transition-all duration-200 ease-in-out hover:bg-teal-50 dark:border-teal-400 dark:text-teal-400 dark:hover:bg-slate-800"
+                className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white/85 transition-all duration-300 hover:bg-white/15"
               >
                 Ask One More Round (Recommended for better accuracy)
               </button>
@@ -271,7 +283,7 @@ export default function ClarificationQuestionsPage() {
         ) : (
           <>
             {screen === "REQUIREMENT_ONLY" ? (
-              <div className="rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-500 shadow-md transition-all duration-200 ease-in-out dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+              <div className="rounded-xl border border-white/10 bg-white/10 p-6 text-sm text-white/70 shadow-xl shadow-blue-900/20 backdrop-blur-lg transition-all duration-300">
                 Questions have not been generated yet.
                 <button
                   type="button"
@@ -310,25 +322,25 @@ export default function ClarificationQuestionsPage() {
                       })
                       .finally(() => setIsLoading(false));
                   }}
-                  className="ml-2 inline-flex items-center justify-center rounded-xl border border-teal-700 px-3 py-1 text-sm font-semibold text-teal-700 transition-all duration-200 ease-in-out hover:bg-teal-50 dark:border-teal-400 dark:text-teal-400 dark:hover:bg-slate-800"
+                  className="ml-2 inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-3 py-1 text-sm font-semibold text-white/85 transition-all duration-300 hover:bg-white/15"
                 >
                   Retry
                 </button>
               </div>
             ) : null}
             {!isLoading && screen !== "REQUIREMENT_ONLY" && questions.length === 0 ? (
-              <div className="rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-500 shadow-md transition-all duration-200 ease-in-out dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+              <div className="rounded-xl border border-white/10 bg-white/10 p-6 text-sm text-white/70 shadow-xl shadow-blue-900/20 backdrop-blur-lg transition-all duration-300">
                 No questions available right now. Please try again in a moment.
               </div>
             ) : null}
             {currentRound && totalRounds && questions.length > 0 ? (
               <div className="space-y-2">
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                <p className="text-xs font-semibold uppercase tracking-wide text-white/70 transition-all duration-300">
                   Clarification Round {currentRound} of {totalRounds}
                 </p>
-                <div className="h-2 w-full rounded-full bg-slate-200 dark:bg-slate-800">
+                <div className="h-2 w-full rounded-full bg-white/15">
                   <div
-                    className="h-2 rounded-full bg-teal-600 dark:bg-teal-400"
+                    className="h-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400"
                     style={{ width: `${progressPercent}%` }}
                   />
                 </div>
@@ -336,11 +348,12 @@ export default function ClarificationQuestionsPage() {
             ) : null}
             <div className="grid gap-4">
               {questions.map((question) => (
-                <div
+                <motion.div
                   key={question.id}
-                  className="rounded-xl border border-slate-200 bg-white p-6 shadow-md transition-all duration-200 ease-in-out dark:border-slate-800 dark:bg-slate-900"
+                  whileHover={{ y: -6, scale: 1.01 }}
+                  className="rounded-xl border border-white/10 bg-white/10 p-6 shadow-xl shadow-blue-900/20 backdrop-blur-lg transition-all duration-300 hover:shadow-[0_0_22px_rgba(59,130,246,0.35)]"
                 >
-                  <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                  <p className="text-sm font-semibold text-white transition-all duration-300">
                     {question.text}
                   </p>
                   <textarea
@@ -349,20 +362,20 @@ export default function ClarificationQuestionsPage() {
                     onChange={(event) => handleChange(question.id, event.target.value)}
                     readOnly={status === "READY_FOR_SPEC" || screen === "QUESTIONS_REVIEW"}
                     disabled={status === "READY_FOR_SPEC" || screen === "QUESTIONS_REVIEW"}
-                    className="mt-3 w-full resize-none rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition-all duration-200 ease-in-out focus:ring-2 focus:ring-teal-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:focus:ring-teal-400"
+                    className="mt-3 w-full resize-none rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-white outline-none transition-all duration-300 placeholder:text-white/40 focus:ring-2 focus:ring-blue-500"
                   />
                   {submitAttempted && validationErrors[question.id] ? (
-                    <p className="mt-2 text-xs text-rose-600 dark:text-rose-400">
+                    <p className="mt-2 text-xs text-rose-200 transition-all duration-300">
                       {validationErrors[question.id]}
                     </p>
                   ) : null}
-                </div>
+                </motion.div>
               ))}
             </div>
 
             {status === "READY_FOR_SPEC" || screen === "QUESTIONS_REVIEW" ? (
               <div className="space-y-4">
-                <div className="rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-500 shadow-md transition-all duration-200 ease-in-out dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+                <div className="rounded-xl border border-white/10 bg-white/10 p-6 text-sm text-white/70 shadow-xl shadow-blue-900/20 backdrop-blur-lg transition-all duration-300">
                   Your answers are locked. You can now generate the specification
                   or optionally refine it further.
                 </div>
@@ -371,7 +384,7 @@ export default function ClarificationQuestionsPage() {
                     type="button"
                     onClick={() => handleDecision("GENERATE")}
                     disabled={isSubmitting || isLoading}
-                    className="inline-flex items-center justify-center rounded-xl bg-teal-700 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 ease-in-out hover:bg-teal-800"
+                    className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-blue-700 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_20px_rgba(59,130,246,0.45)] transition-all duration-300 hover:scale-105"
                   >
                     {isSubmitting ? "Processing..." : "Generate Specification Document"}
                   </button>
@@ -379,7 +392,7 @@ export default function ClarificationQuestionsPage() {
                     type="button"
                     onClick={() => handleDecision("EXTRA_ROUND")}
                     disabled={isSubmitting || isLoading}
-                    className="inline-flex items-center justify-center rounded-xl border border-teal-700 px-5 py-2.5 text-sm font-semibold text-teal-700 transition-all duration-200 ease-in-out hover:bg-teal-50 dark:border-teal-400 dark:text-teal-400 dark:hover:bg-slate-800"
+                    className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white/85 transition-all duration-300 hover:bg-white/15"
                   >
                     Ask One More Round (Recommended for better accuracy)
                   </button>
@@ -391,7 +404,7 @@ export default function ClarificationQuestionsPage() {
                   type="button"
                   onClick={handleGenerate}
                   disabled={isSubmitting || isLoading}
-                  className="inline-flex items-center justify-center rounded-xl bg-teal-700 px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 ease-in-out hover:bg-teal-800"
+                  className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-blue-700 px-6 py-2.5 text-sm font-semibold text-white shadow-[0_0_20px_rgba(59,130,246,0.45)] transition-all duration-300 hover:scale-105"
                 >
                   {isSubmitting ? "Submitting..." : "Generate Specification"}
                 </button>
@@ -400,6 +413,6 @@ export default function ClarificationQuestionsPage() {
           </>
         )}
       </section>
-    </div>
+    </motion.div>
   );
 }

@@ -26,6 +26,18 @@ import {
 } from "./services/api";
 import { clearAuth, getStoredUser, getToken, setAuth } from "./services/auth";
 
+function RequireAuth({
+  isLoggedIn,
+  children,
+}: {
+  isLoggedIn: boolean;
+  children: ReactNode;
+}) {
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+}
 function AppRoutes() {
   const [token, setToken] = useState<string | null>(() => getToken());
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(() =>
@@ -137,13 +149,6 @@ function AppRoutes() {
     navigate("/login");
   };
 
-  const RequireAuth = ({ children }: { children: ReactNode }) => {
-    if (!isLoggedIn) {
-      return <Navigate to="/login" replace />;
-    }
-    return children;
-  };
-
   return (
     <Routes>
       <Route
@@ -181,7 +186,7 @@ function AppRoutes() {
         <Route
           path="/projects/:id/clarifications"
           element={
-            <RequireAuth>
+            <RequireAuth isLoggedIn={isLoggedIn}>
               <ClarificationQuestionsPage />
             </RequireAuth>
           }
@@ -189,7 +194,7 @@ function AppRoutes() {
         <Route
           path="/projects/:id/spec"
           element={
-            <RequireAuth>
+            <RequireAuth isLoggedIn={isLoggedIn}>
               <SpecPreviewPage />
             </RequireAuth>
           }
@@ -197,7 +202,7 @@ function AppRoutes() {
         <Route
           path="/settings"
           element={
-            <RequireAuth>
+            <RequireAuth isLoggedIn={isLoggedIn}>
               <SettingsPage />
             </RequireAuth>
           }
@@ -216,3 +221,4 @@ export default function App() {
     </BrowserRouter>
   );
 }
+

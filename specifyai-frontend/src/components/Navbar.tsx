@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { useTheme } from "../contexts/ThemeContext";
+import { motion } from "framer-motion";
 
 type NavbarProps = {
   userName: string;
@@ -10,8 +10,8 @@ type NavbarProps = {
 
 export default function Navbar({ userName, isLoggedIn, onLogout }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
-  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     if (!isMenuOpen) {
@@ -33,17 +33,48 @@ export default function Navbar({ userName, isLoggedIn, onLogout }: NavbarProps) 
     };
   }, [isMenuOpen]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const headerClasses = isScrolled
+    ? "fixed left-0 top-0 z-50 h-16 w-full border-b border-white/10 bg-slate-900/60 shadow-[0_0_25px_rgba(59,130,246,0.25)] backdrop-blur-xl transition-all duration-300"
+    : "fixed left-0 top-0 z-50 h-16 w-full border-b border-white/10 bg-white/5 backdrop-blur-lg transition-all duration-300";
+
   return (
-    <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-4 md:px-20 dark:border-slate-800 dark:bg-slate-950">
-      <div className="flex items-center gap-3">
+    <motion.header
+      initial={{ opacity: 0, y: -24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45, ease: "easeOut" }}
+      className={headerClasses}
+    >
+      {!isScrolled ? (
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 to-transparent" />
+      ) : null}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-transparent to-blue-500/5" />
+      <motion.div
+        className="absolute bottom-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-cyan-300/60 to-transparent"
+        animate={{ opacity: [0.35, 0.85, 0.35] }}
+        transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      <div className="relative mx-auto flex h-full w-full max-w-7xl items-center justify-between px-4 sm:px-6 md:px-8">
         <Link
           to="/dashboard"
-          className="text-lg font-semibold text-slate-900 hover:text-slate-700 dark:text-slate-100 dark:hover:text-slate-200"
+          className="text-lg font-semibold tracking-wide text-white transition-all duration-300 hover:text-white"
         >
           SpecifyAI
         </Link>
-      </div>
-      <div className="flex items-center gap-3">
+
+        <div className="flex items-center gap-2 sm:gap-3">
         {isLoggedIn ? (
           <div
             ref={menuRef}
@@ -60,7 +91,7 @@ export default function Navbar({ userName, isLoggedIn, onLogout }: NavbarProps) 
             <span className="absolute inset-x-0 top-full h-2" aria-hidden="true" />
             <button
               type="button"
-              className="inline-flex items-center gap-1 text-sm text-slate-600 transition hover:text-slate-800 focus:outline-none dark:text-slate-300 dark:hover:text-slate-100"
+              className="inline-flex items-center gap-1 rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-sm text-white transition-all duration-300 hover:text-white focus:outline-none"
               onFocus={() => setIsMenuOpen(true)}
               onClick={() => setIsMenuOpen((prev) => !prev)}
               onKeyDown={(event) => {
@@ -75,7 +106,7 @@ export default function Navbar({ userName, isLoggedIn, onLogout }: NavbarProps) 
               <svg
                 aria-hidden="true"
                 viewBox="0 0 20 20"
-                className="h-4 w-4 text-slate-400 dark:text-slate-500"
+                className="h-4 w-4 text-white/70"
               >
                 <path
                   d="M5.5 7.5L10 12l4.5-4.5"
@@ -88,18 +119,18 @@ export default function Navbar({ userName, isLoggedIn, onLogout }: NavbarProps) 
               </svg>
             </button>
             {isMenuOpen ? (
-              <div className="absolute right-0 mt-2 w-44 rounded-lg border border-slate-200 bg-white py-1 shadow-md dark:border-slate-800 dark:bg-slate-900">
+              <div className="absolute right-0 mt-2 w-44 rounded-xl border border-white/10 bg-slate-950/90 py-1 shadow-2xl shadow-blue-900/30 backdrop-blur-lg">
                 <Link
                   to="/settings"
                   onClick={() => setIsMenuOpen(false)}
-                  className="flex w-full items-center px-3 py-2 text-left text-sm text-slate-700 transition hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
+                  className="flex w-full items-center px-3 py-2 text-left text-sm text-white/80 transition-all duration-300 hover:bg-white/10 hover:text-white"
                 >
                   Settings
                 </Link>
                 <button
                   type="button"
                   onClick={onLogout}
-                  className="flex w-full items-center px-3 py-2 text-left text-sm text-red-500 transition hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-950/40 dark:hover:text-red-300"
+                  className="flex w-full items-center px-3 py-2 text-left text-sm text-rose-300 transition-all duration-300 hover:bg-rose-500/10 hover:text-rose-200"
                 >
                   Logout
                 </button>
@@ -107,29 +138,35 @@ export default function Navbar({ userName, isLoggedIn, onLogout }: NavbarProps) 
             ) : null}
           </div>
         ) : null}
-        <button
-          type="button"
-          onClick={toggleTheme}
-          role="switch"
-          aria-checked={theme === "dark"}
-          aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-          className="relative inline-flex h-6 w-12 items-center rounded-full border border-slate-200 bg-slate-100 px-1 shadow-sm transition hover:bg-slate-200 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800"
-        >
-          <span
-            className={`inline-flex h-6 w-6 items-center justify-center rounded-full bg-white text-xs font-semibold text-slate-600 shadow-sm transition-transform dark:bg-slate-200 dark:text-slate-700 ${
-              theme === "dark" ? "translate-x-7" : "translate-x-0"
-            }`}
+          {/*<motion.button
+            type="button"
+            onClick={toggleTheme}
+            whileHover={{ scale: 1.04 }}
+            role="switch"
+            aria-checked={theme === "dark"}
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            className="relative inline-flex h-7 w-14 items-center rounded-full border border-white/20 bg-white/10 px-1 text-[10px] font-semibold uppercase tracking-wide text-white transition-all duration-300 hover:text-white focus:outline-none"
           >
-            {theme === "dark" ? "On" : "Off"}
-          </span>
-        </button>
-        <Link
-          to="/new-project"
-          className="rounded-lg bg-teal-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-800"
-        >
-          New Project
-        </Link>
+            <span
+              className={`inline-flex h-5 w-5 items-center justify-center rounded-full bg-white text-[9px] font-bold text-slate-700 transition-all duration-300 ${
+                theme === "dark" ? "translate-x-7" : "translate-x-0"
+              }`}
+            >
+              {theme === "dark" ? "On" : "Off"}
+            </span>
+          </motion.button>
+          */}
+
+          <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
+            <Link
+              to="/new-project"
+              className="rounded-xl bg-gradient-to-r from-blue-500 to-blue-700 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.45)] transition-all duration-300 hover:shadow-[0_0_28px_rgba(59,130,246,0.65)]"
+            >
+              New Project
+            </Link>
+          </motion.div>
+        </div>
       </div>
-    </header>
+    </motion.header>
   );
 }
